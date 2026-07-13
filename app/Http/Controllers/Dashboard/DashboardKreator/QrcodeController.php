@@ -3,15 +3,23 @@
 namespace App\Http\Controllers\Dashboard\DashboardKreator;
 
 use App\Http\Controllers\Controller;
+use App\Models\Users;
 use Illuminate\Http\Request;
 
 class QrcodeController extends Controller
 {
+    public Users $user;
+
+    public function __construct()
+    {
+        $this->user = new Users();
+    }
     public function index()
     {
         $user = auth()->user();
+        $title = 'Dashboard QR-COde | ChipIn';
 
-        return view('Qrcode', compact('user'));
+        return view('Qrcode', compact('user', 'title'));
     }
 
     //
