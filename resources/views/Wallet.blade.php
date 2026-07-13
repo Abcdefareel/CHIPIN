@@ -37,7 +37,7 @@
 
     <aside class="w-60 min-h-screen bg-brand-sidebar flex flex-col py-6 fixed top-0 left-0 bottom-0 z-50">
         <div class="px-5 pb-7 text-2xl font-extrabold text-white tracking-tight">
-            Creative<span class="text-brand-accent">Hub</span>
+            Chip<span class="text-brand-accent">IN</span>
         </div>
 
         <div class="px-3 pt-1.5 pb-1 text-[10px] font-bold tracking-widest text-[#4a5570] uppercase mt-2">Navigasi</div>
@@ -172,7 +172,9 @@
                                 class="w-4 h-4 border border-brand-muted rounded-full text-[9px] flex items-center justify-center cursor-help text-brand-muted"
                                 title="Saldo yang bisa kamu tarik ke rekening">i</span>
                         </div>
-                        <div class="text-xl font-bold tracking-widest text-brand-accent2">••••••••</div>
+                        <div class="text-xl font-bold tracking-widest text-brand-accent2">
+                            Rp {{ number_format($user->creatorProfile->balance_available, 0, ',', '.') }}
+                        </div>
                     </div>
                     <div class="py-2 md:pl-6 border-l-0 md:border-l border-brand-border">
                         <div class="text-xs text-brand-muted mb-2.5 flex items-center gap-1.5">
@@ -181,7 +183,9 @@
                                 class="w-4 h-4 border border-brand-muted rounded-full text-[9px] flex items-center justify-center cursor-help text-brand-muted"
                                 title="Saldo yang sedang diproses">i</span>
                         </div>
-                        <div class="text-xl font-bold tracking-widest text-brand-primary">••••••••</div>
+                        <div class="text-xl font-bold tracking-widest text-brand-primary">
+                            Rp {{ number_format($user->creatorProfile->balance_pending, 0, ',', '.') }}
+                        </div>
                     </div>
                 </div>
             </div>
@@ -280,9 +284,6 @@
         }
     </script>
 
-</body>
-
-</html>
 </body>
 
 </html>

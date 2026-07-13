@@ -16,4 +16,9 @@ class CreatorProfile extends Model
     {
         return $this->belongsTo(Users::class, 'user_id', 'id');
     }
+    
+    public function donations()
+    {
+        return $this->hasMany(Donation::class);
+    }
 }

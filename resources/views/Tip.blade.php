@@ -37,7 +37,7 @@
 
     <aside class="w-60 min-h-screen bg-brand-sidebar flex flex-col py-6 fixed top-0 left-0 bottom-0 z-50">
         <div class="px-5 pb-7 text-2xl font-extrabold text-white tracking-tight">
-            Creative<span class="text-brand-accent">Hub</span>
+            Chip<span class="text-brand-accent">IN</span>
         </div>
 
         <div class="px-3 pt-1.5 pb-1 text-[10px] font-bold tracking-widest text-[#4a5570] uppercase mt-2">Navigasi</div>

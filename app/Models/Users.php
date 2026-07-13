@@ -27,6 +27,11 @@ class Users extends Authenticatable
         return $this->hasOne(CreatorProfile::class, 'user_id', 'id');
     }
 
+    public function donations()
+    {
+        return $this->hasMany(Donation::class, 'user_id', 'id');
+    }
+
     public function insertData(array $data)
     {
         $data['password'] = Hash::make($data['password']);

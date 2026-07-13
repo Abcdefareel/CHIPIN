@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
 use App\Models\CreatorProfile;
+use App\Models\Donation;
 use Illuminate\Http\Request;
 
 class DonationController extends Controller
@@ -25,8 +26,23 @@ class DonationController extends Controller
             'message' => 'nullable|string|max:500',
         ]);
 
+        $donationData = [
+            'creator_profile_id' => $creator->id,
+            'sender_name' => $validated['sender_name'] ?? 'Anonymous',
+            'message' => $validated['message'],
+            'amount' => $validated['amount'],
+            'status' => 'pending',
+        ];
+
+        if (auth()->check()) {
+            $donationData['user_id'] = auth()->id();
+        }
+
+        $donation = Donation::create($donationData);
+
+        $creator->increment('balance_pending', $donation->net_amount);
 
         return redirect()->route('donate.show', $username)
-            ->with('success', 'Tip berhasil dikirim ke ' . $creator->name);
+            ->with('success', 'Tip berhasil dikirim, menunggu konfirmasi pembayaran.');
     }
 }

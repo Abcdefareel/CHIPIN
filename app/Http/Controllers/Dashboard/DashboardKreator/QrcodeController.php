@@ -9,8 +9,10 @@ class QrcodeController extends Controller
 {
     public function index()
     {
-        return view('Qrcode');
+        $user = auth()->user();
+
+        return view('Qrcode', compact('user'));
     }
-    
+
     //
 }

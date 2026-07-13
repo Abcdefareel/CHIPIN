@@ -12,6 +12,7 @@ use App\Http\Controllers\Dashboard\ProfileController as DashboardProfileControll
 use App\Http\Controllers\Dashboard\TransactionController;
 use App\Http\Controllers\LandingPage\LandingPageController;
 use App\Http\Controllers\DonationController;
+use App\Http\Controllers\Dashboard\OverlayController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [LandingPageController::class, 'index']);
@@ -35,6 +36,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/kreator/wallet', [walletController::class, 'index'])->name('wallet');
     Route::get('/kreator/tip', [TipController::class, 'index'])->name('kreator.tip');
     Route::get('/kreator/tipmasuk', [TipsmasukController::class, 'index'])->name('kreator.tipmasuk');
+    Route::put('/kreator/tipmasuk/{donation}/confirm', [TipsmasukController::class, 'confirm'])->name('kreator.tipmasuk.confirm');
     Route::get('/kreator/qrcode', [QrcodeController::class, 'index'])->name('kreator.qrcode');
 });
 
@@ -42,3 +44,7 @@ Route::middleware('auth')->group(function () {
 // Route publik, TIDAK dibungkus middleware auth
 Route::get('/donate/{username}', [DashboardDonationController::class, 'show'])->name('donate.show');
 Route::post('/donate/{username}', [DashboardDonationController::class, 'send'])->name('donate.send');
+
+
+
+Route::get('/overlay/{username}', [OverlayController::class, 'show'])->name('overlay.show');

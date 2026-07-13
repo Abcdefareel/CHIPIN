@@ -31,13 +31,14 @@
             }
         }
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
 </head>
 
 <body class="bg-brand-bg text-brand-primary min-h-screen flex text-sm">
 
     <aside class="w-60 min-h-screen bg-brand-sidebar flex flex-col py-6 fixed top-0 left-0 bottom-0 z-50">
         <div class="px-5 pb-7 text-2xl font-extrabold text-white tracking-tight">
-            Creative<span class="text-brand-accent">Hub</span>
+            Chip<span class="text-brand-accent">IN</span>
         </div>
 
         <div class="px-3 pt-1.5 pb-1 text-[10px] font-bold tracking-widest text-[#4a5570] uppercase mt-2">Navigasi</div>
@@ -106,7 +107,7 @@
                     class="w-8 h-8 rounded-full bg-gradient-to-br from-brand-accent to-[#00a8d4] flex items-center justify-center font-bold text-sm text-brand-sidebar flex-shrink-0">
                     A</div>
                 <div class="flex-1 min-w-0">
-                    <strong class="block text-white text-xs truncate">creator29244</strong>
+                    <strong class="block text-white text-xs truncate">{{ $user->creatorProfile->username }}</strong>
                     <small class="text-[#4a5570] text-[11px]">Creator</small>
                 </div>
             </div>
@@ -133,11 +134,9 @@
                     penonton bisa langsung scan untuk memberikan tip.</p>
 
                 <div class="flex flex-col items-center py-7 px-5 text-center">
-                    <div
-                        class="w-48 h-48 bg-[#e5e9f2] rounded-xl flex items-center justify-center mb-5 border-2 border-dashed border-brand-muted">
-                        <span class="font-semibold text-brand-muted">[ QR Code Preview ]</span>
-                    </div>
-                    <p class="text-xs text-brand-muted mb-5">Scan untuk langsung menuju halaman tip creator29244</p>
+                    <div id="qrcode-container" class="flex items-center justify-center"></div>
+                    <p class="text-xs text-brand-muted mb-5">Scan untuk langsung menuju halaman tip
+                        {{ $user->creatorProfile->username }}</p>
 
                     <div class="flex gap-2.5 justify-center w-full max-w-[400px]">
                         <button
@@ -148,7 +147,7 @@
                             </svg>
                             Unduh PNG
                         </button>
-                        <button
+                        <button id="copyQrLinkBtn"
                             class="flex-1 py-2.5 px-3 border border-brand-accent text-brand-accent2 font-semibold text-xs rounded-lg flex items-center justify-center gap-1.5 transition duration-150 hover:bg-brand-accent hover:text-brand-primary">
                             <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24">
                                 <rect x="9" y="9" width="13" height="13" rx="2" stroke="currentColor"
@@ -156,14 +155,38 @@
                                 <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" stroke="currentColor"
                                     stroke-width="2" />
                             </svg>
-                            Salin Link QR
+                            <span id="copyQrBtnText">Salin Link QR</span>
                         </button>
                     </div>
                 </div>
             </div>
         </div>
     </main>
+    <script>
+        const donateUrl = '{{ url('/donate/' . $user->creatorProfile->username) }}';
 
+        new QRCode(document.getElementById('qrcode-container'), {
+            text: donateUrl,
+            width: 200,
+            height: 200,
+            colorDark: '#000000',
+            colorLight: '#ffffff',
+        });
+
+
+        const copyQrLinkBtn = document.getElementById('copyQrLinkBtn');
+        if (copyQrLinkBtn) {
+            copyQrLinkBtn.addEventListener('click', () => {
+                navigator.clipboard.writeText(donateUrl).then(() => {
+                    const btnText = document.getElementById('copyQrBtnText');
+                    btnText.textContent = 'Copied!';
+                    setTimeout(() => {
+                        btnText.textContent = 'Salin Link QR';
+                    }, 1500);
+                });
+            });
+        }
+    </script>
 </body>
 
 </html>

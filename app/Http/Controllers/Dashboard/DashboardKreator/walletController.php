@@ -11,7 +11,7 @@ class walletController extends Controller
     {
         $user = auth()->user();
 
-        return view('wallet', compact('user'));
+        return view('Wallet', compact('user'));
     }
     //
 }
