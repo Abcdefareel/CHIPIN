@@ -10,13 +10,15 @@ class CreatorProfile extends Model
         'user_id',
         'name',
         'username',
+        'balance_available',
+        'balance_pending',
     ];
 
     public function user()
     {
         return $this->belongsTo(Users::class, 'user_id', 'id');
     }
-    
+
     public function donations()
     {
         return $this->hasMany(Donation::class);

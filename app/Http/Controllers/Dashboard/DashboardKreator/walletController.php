@@ -16,7 +16,7 @@ class walletController extends Controller
     }
     public function index()
     {
-        $user = auth()->user();
+        $user = auth()->user()->load('creatorProfile');
         $title = 'Dashboard Wallet | ChipIn';
 
         return view('Wallet', compact('user', 'title'));

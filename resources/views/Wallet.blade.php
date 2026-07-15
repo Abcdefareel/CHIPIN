@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('dashboard-kreator')
-        <main class="ml-60 flex-1 py-9 px-10 min-h-screen">
+    <main class="ml-60 flex-1 py-9 px-10 min-h-screen">
         <div id="page-wallet" class="page">
             <h1 class="text-3xl font-extrabold tracking-tight mb-7">Wallet</h1>
 
@@ -8,8 +8,9 @@
                 <div class="text-[11px] font-bold tracking-wider text-brand-muted uppercase mb-4">URL Profile Kamu</div>
                 <div class="flex items-center gap-3 bg-brand-bg border border-brand-border rounded-lg p-3 mb-2.5">
                     <span id="donateUrl"
-                        class="flex-1 font-medium text-brand-primary">{{ url('/donate/' . $user->creatorProfile->username) }}</span>
-                    <button id="copyUrlBtn" type="button"
+                        data-profile-url="{{ url('/donate/' . ($user->creatorProfile->username ?? $user->username)) }}"
+                        class="flex-1 font-medium text-brand-primary">{{ url('/donate/' . ($user->creatorProfile->username ?? $user->username)) }}</span>
+                    <button id="copyUrlBtn" type="button" onclick="copyProfileUrl()"
                         class="py-1.5 px-3.5 border-2 border-brand-primary bg-transparent text-brand-primary text-xs font-semibold rounded-lg flex items-center gap-1.5 whitespace-nowrap transition duration-150 hover:bg-brand-primary hover:text-white">
                         <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24">
                             <rect x="9" y="9" width="13" height="13" rx="2" stroke="currentColor"
@@ -23,8 +24,7 @@
                         class="py-1.5 px-3.5 border-2 border-brand-accent bg-transparent text-brand-accent2 text-xs font-semibold rounded-lg flex items-center gap-1.5 whitespace-nowrap transition duration-150 hover:bg-brand-accent hover:text-brand-primary no-underline">
                         <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24">
                             <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3"
-                                stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                stroke-linejoin="round" />
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                         </svg>
                         Buka di Tab Baru
                     </a>
@@ -35,8 +35,7 @@
                 <button
                     class="inline-flex items-center gap-1.5 py-1.5 px-3.5 border-2 border-brand-accent bg-brand-accent/5 rounded-lg text-brand-accent2 text-xs font-semibold cursor-pointer mb-5 transition duration-150 hover:bg-brand-accent/20">
                     <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24">
-                        <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z" stroke="currentColor"
-                            stroke-width="2" />
+                        <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z" stroke="currentColor" stroke-width="2" />
                         <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2" />
                     </svg>
                     Tampilkan
@@ -49,7 +48,8 @@
                                 class="w-4 h-4 border border-brand-muted rounded-full text-[9px] flex items-center justify-center cursor-help text-brand-muted"
                                 title="Saldo yang bisa kamu tarik ke rekening">i</span>
                         </div>
-                        <div class="text-xl font-bold tracking-widest text-brand-accent2">••••••••</div>
+                        <div class="text-xl font-bold tracking-widest text-brand-accent2">Rp
+                            {{ number_format($user->creatorProfile->balance_available ?? 0, 0, ',', '.') }}</div>
                     </div>
                     <div class="py-2 md:pl-6 border-l-0 md:border-l border-brand-border">
                         <div class="text-xs text-brand-muted mb-2.5 flex items-center gap-1.5">
@@ -58,7 +58,8 @@
                                 class="w-4 h-4 border border-brand-muted rounded-full text-[9px] flex items-center justify-center cursor-help text-brand-muted"
                                 title="Saldo yang sedang diproses">i</span>
                         </div>
-                        <div class="text-xl font-bold tracking-widest text-brand-primary">••••••••</div>
+                        <div class="text-xl font-bold tracking-widest text-brand-primary">Rp
+                            {{ number_format($user->creatorProfile->balance_pending ?? 0, 0, ',', '.') }}</div>
                     </div>
                 </div>
             </div>
@@ -71,8 +72,7 @@
                         <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24">
                             <path
                                 d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"
-                                stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                stroke-linejoin="round" />
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                         </svg>
                         Edit
                     </button>
@@ -95,20 +95,15 @@
                     <table class="w-full border-collapse">
                         <thead>
                             <tr class="border-b-2 border-brand-border">
-                                <th
-                                    class="text-left text-[11px] font-bold tracking-wider text-brand-muted uppercase p-3">
+                                <th class="text-left text-[11px] font-bold tracking-wider text-brand-muted uppercase p-3">
                                     Transaction</th>
-                                <th
-                                    class="text-left text-[11px] font-bold tracking-wider text-brand-muted uppercase p-3">
+                                <th class="text-left text-[11px] font-bold tracking-wider text-brand-muted uppercase p-3">
                                     Date</th>
-                                <th
-                                    class="text-left text-[11px] font-bold tracking-wider text-brand-muted uppercase p-3">
+                                <th class="text-left text-[11px] font-bold tracking-wider text-brand-muted uppercase p-3">
                                     Total</th>
-                                <th
-                                    class="text-left text-[11px] font-bold tracking-wider text-brand-muted uppercase p-3">
+                                <th class="text-left text-[11px] font-bold tracking-wider text-brand-muted uppercase p-3">
                                     Diterima</th>
-                                <th
-                                    class="text-left text-[11px] font-bold tracking-wider text-brand-muted uppercase p-3">
+                                <th class="text-left text-[11px] font-bold tracking-wider text-brand-muted uppercase p-3">
                                     Potongan Platform</th>
                             </tr>
                         </thead>
@@ -142,3 +137,19 @@
         </div>
     </main>
 @endsection
+
+<script>
+    function copyProfileUrl() {
+        const url = document.getElementById('donateUrl')?.dataset.profileUrl;
+        if (!url) return;
+        navigator.clipboard.writeText(url).then(() => {
+            const button = document.getElementById('copyUrlBtn');
+            const text = document.getElementById('copyBtnText');
+            if (button && text) {
+                const original = text.textContent;
+                text.textContent = 'Tersalin';
+                setTimeout(() => text.textContent = original, 1500);
+            }
+        });
+    }
+</script>

@@ -7,7 +7,9 @@
     <title>ChipIN — Log In</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
@@ -26,11 +28,16 @@
         </div>
     @endif
 
-    <div class="min-h-screen grid grid-cols-1 lg:grid-cols-2 bg-gradient-to-br from-indigo-950 via-[#1e1b4b] to-violet-950">
+    <div
+        class="min-h-screen grid grid-cols-1 lg:grid-cols-2 bg-gradient-to-br from-indigo-950 via-[#1e1b4b] to-violet-950">
 
         <div class="hidden lg:flex flex-col justify-center p-16 px-12 relative overflow-hidden">
-            <div class="pointer-events-none absolute -top-20 -right-10 w-72 h-72 bg-violet-500/20 rounded-full blur-3xl -z-10"></div>
-            <div class="pointer-events-none absolute bottom-10 -left-16 w-64 h-64 bg-indigo-500/20 rounded-full blur-3xl -z-10"></div>
+            <div
+                class="pointer-events-none absolute -top-20 -right-10 w-72 h-72 bg-violet-500/20 rounded-full blur-3xl -z-10">
+            </div>
+            <div
+                class="pointer-events-none absolute bottom-10 -left-16 w-64 h-64 bg-indigo-500/20 rounded-full blur-3xl -z-10">
+            </div>
             <a class="absolute top-6 left-8 flex items-center gap-2 font-bold text-lg text-white no-underline hover:underline z-10"
                 href="#">
                 <div class="grid grid-cols-2 gap-[3px] w-5 h-5">
@@ -82,7 +89,7 @@
                             <label class="text-[0.75rem] font-semibold tracking-wider uppercase text-[#64748b]"
                                 for="login-password">Password</label>
                             <a class="text-[0.75rem] font-semibold text-[#64748b] no-underline hover:text-[#1e1b4b] hover:underline"
-                                href="#">Forgot Password?</a>
+                                href="{{ route('password.forgot.form') }}">Forgot Password?</a>
                         </div>
                         <div class="relative flex items-center">
                             <input id="login-password" name="password"
@@ -97,10 +104,10 @@
                         </div>
                     </div>
 
-                    <label class="flex items-start gap-2 text-[0.875rem] text-[#64748b] cursor-pointer">
-                        <input type="checkbox" class="w-4 h-4 mt-[1px] shrink-0 accent-[#6366f1] cursor-pointer" />
-                        Stay signed in for 30 days
-                    </label>
+                    <a href="{{ route('password.forgot.form') }}"
+                        class="flex items-start gap-2 text-[0.875rem] text-[#64748b] hover:underline">
+                        Lupa password?
+                    </a>
 
                     <button
                         class="inline-flex items-center justify-center gap-2 text-[0.875rem] font-semibold leading-none p-[0.875rem] px-6 rounded-2xl border border-transparent cursor-pointer transition-all duration-300 whitespace-nowrap no-underline bg-gradient-to-r from-indigo-600 to-violet-600 text-white hover:from-indigo-500 hover:to-violet-500 hover:shadow-[0_6px_20px_rgba(99,102,241,0.35)] w-full mt-2"

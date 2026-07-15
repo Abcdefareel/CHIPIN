@@ -14,10 +14,11 @@
                             class="w-48 h-48 bg-[#e2e8f0] rounded-xl flex items-center justify-center mb-5 border-2 border-dashed border-brand-muted">
                             <span class="font-semibold text-brand-muted">[ QR Code Preview ]</span>
                         </div>
-                        <p class="text-xs text-brand-muted mb-5">Scan untuk langsung menuju halaman tip creator29244</p>
+                        <p class="text-xs text-brand-muted mb-5">Scan untuk langsung menuju halaman tip
+                            {{ $user->creatorProfile->username ?? $user->username }}</p>
 
                         <div class="flex gap-2.5 justify-center w-full max-w-[400px]">
-                            <button
+                            <button type="button" onclick="downloadQrPlaceholder()"
                                 class="flex-1 py-2.5 px-3 border border-brand-primary text-brand-primary font-semibold text-xs rounded-lg flex items-center justify-center gap-1.5 transition duration-150 hover:bg-brand-primary hover:text-white">
                                 <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24">
                                     <path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2"
@@ -25,7 +26,7 @@
                                 </svg>
                                 Unduh PNG
                             </button>
-                            <button
+                            <button type="button" onclick="copyQrLink()"
                                 class="flex-1 py-2.5 px-3 border border-brand-accent text-brand-accent2 font-semibold text-xs rounded-lg flex items-center justify-center gap-1.5 transition duration-150 hover:bg-brand-accent hover:text-brand-primary">
                                 <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24">
                                     <rect x="9" y="9" width="13" height="13" rx="2" stroke="currentColor"
@@ -41,3 +42,23 @@
             </div>
         </main>
     @endsection
+
+    <script>
+        function copyQrLink() {
+            const text = '{{ url('/donate/' . ($user->creatorProfile->username ?? $user->username)) }}';
+            navigator.clipboard.writeText(text).then(() => alert('Link QR berhasil disalin!'));
+        }
+
+        function downloadQrPlaceholder() {
+            const text = 'QR Code untuk {{ $user->creatorProfile->username ?? $user->username }}';
+            const blob = new Blob([text], {
+                type: 'text/plain;charset=utf-8'
+            });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'qr-code-placeholder.txt';
+            link.click();
+            URL.revokeObjectURL(url);
+        }
+    </script>

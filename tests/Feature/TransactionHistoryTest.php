@@ -46,6 +46,66 @@ class TransactionHistoryTest extends TestCase
         $response->assertSee('1.500');
     }
 
+    public function test_creator_can_see_sender_name_and_message_on_tips_incoming_page(): void
+    {
+        $user = Users::create([
+            'username' => 'creator-viewer',
+            'email' => 'creator-viewer@example.com',
+            'password' => bcrypt('password123'),
+        ]);
+
+        $creator = CreatorProfile::create([
+            'user_id' => $user->id,
+            'name' => 'Creator Viewer',
+            'username' => 'creator-viewer',
+        ]);
+
+        $this->actingAs($user);
+
+        Donation::create([
+            'creator_profile_id' => $creator->id,
+            'user_id' => $user->id,
+            'sender_name' => 'Budi Fans',
+            'message' => 'Semangat terus!',
+            'amount' => 2500,
+            'status' => 'pending',
+        ]);
+
+        $response = $this->get(route('kreator.tipmasuk'));
+
+        $response->assertOk();
+        $response->assertSee('Budi Fans');
+        $response->assertSee('Semangat terus!');
+    }
+
+    public function test_donation_with_matching_username_is_linked_to_existing_user_history(): void
+    {
+        $donor = Users::create([
+            'username' => 'donoruser',
+            'email' => 'donoruser@example.com',
+            'password' => bcrypt('password123'),
+        ]);
+
+        $creator = CreatorProfile::create([
+            'user_id' => $donor->id,
+            'name' => 'Creator For Link',
+            'username' => 'creator-link',
+        ]);
+
+        $response = $this->post(route('donate.send', $creator->username), [
+            'amount' => 1800,
+            'sender_name' => 'donoruser',
+            'message' => 'Saya ingin ikut dukung',
+        ]);
+
+        $response->assertRedirect();
+
+        $donation = Donation::latest()->first();
+
+        $this->assertNotNull($donation);
+        $this->assertEquals($donor->id, $donation->user_id);
+    }
+
     public function test_authenticated_user_can_filter_transactions_by_search_and_status(): void
     {
         $user = Users::create([

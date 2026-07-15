@@ -16,33 +16,29 @@
         <p id="tipAmount" class="text-[#e8ff5c] font-bold text-base">Rp 1.000.000</p>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/pusher-js@8/dist/web/pusher.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/laravel-echo@1/dist/echo.iife.js"></script>
     <script>
-        window.Pusher = Pusher;
+        const overlayUrl = '{{ route('overlay.latest-donation', $creator->username) }}';
+        let lastDonationSignature = null;
 
-        window.Echo = new Echo({
-            broadcaster: 'reverb',
-            key: '{{ env('REVERB_APP_KEY') }}',
-            wsHost: '{{ env('REVERB_HOST') }}',
-            wsPort: {{ env('REVERB_PORT', 8080) }},
-            wssPort: {{ env('REVERB_PORT', 8080) }},
-            forceTLS: false,
-            enabledTransports: ['ws', 'wss'],
-        });
+        function pollLatestDonation() {
+            fetch(overlayUrl)
+                .then((response) => response.json())
+                .then((data) => {
+                    if (!data) return;
 
-        window.Echo.connector.pusher.connection.bind('connected', () => {
-            console.log('BERHASIL connect ke Reverb!');
-        });
+                    const signature = `${data.sender_name || ''}|${data.message || ''}|${data.amount || 0}`;
+                    if (signature === lastDonationSignature) return;
 
-        const channelName = 'tip-channel.{{ $creator->username }}';
-        console.log('Subscribing ke channel:', channelName);
+                    lastDonationSignature = signature;
+                    showTip(data);
+                })
+                .catch(() => {
+                    console.warn('Polling overlay gagal.');
+                });
+        }
 
-        window.Echo.channel(channelName)
-            .listen('TipReceived', (data) => {
-                console.log('Event diterima:', data);
-                showTip(data);
-            });
+        setInterval(pollLatestDonation, 2000);
+        pollLatestDonation();
 
         function formatRupiah(num) {
             return new Intl.NumberFormat('id-ID').format(num);

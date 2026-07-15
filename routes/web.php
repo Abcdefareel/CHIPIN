@@ -22,6 +22,14 @@ Route::middleware('guest')->group(function () {
     Route::post('/login/process', [LoginController::class, 'loginProcess']);
     Route::get('/register', [RegisterController::class, 'index'])->name('register');
     Route::post('/register/process', [RegisterController::class, 'registerProcess']);
+
+    // Password reset via OTP
+    Route::get('/forgot', [\App\Http\Controllers\Auth\PasswordResetController::class, 'showForgot'])->name('password.forgot.form');
+    Route::post('/forgot', [\App\Http\Controllers\Auth\PasswordResetController::class, 'sendOtp'])->name('password.send');
+    Route::get('/forgot/verify', [\App\Http\Controllers\Auth\PasswordResetController::class, 'showVerify'])->name('password.verify.form');
+    Route::post('/forgot/verify', [\App\Http\Controllers\Auth\PasswordResetController::class, 'verifyOtp'])->name('password.verify');
+    Route::get('/forgot/reset', [\App\Http\Controllers\Auth\PasswordResetController::class, 'showReset'])->name('password.reset.form');
+    Route::post('/forgot/reset', [\App\Http\Controllers\Auth\PasswordResetController::class, 'resetPassword'])->name('password.reset');
 });
 
 Route::middleware('auth')->group(function () {
@@ -37,6 +45,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/kreator/tip', [TipController::class, 'index'])->name('kreator.tip');
     Route::get('/kreator/tipmasuk', [TipsmasukController::class, 'index'])->name('kreator.tipmasuk');
     Route::put('/kreator/tipmasuk/{donation}/confirm', [TipsmasukController::class, 'confirm'])->name('kreator.tipmasuk.confirm');
+    Route::patch('/kreator/tipmasuk/{donation}/status', [TipsmasukController::class, 'updateStatus'])->name('kreator.tipmasuk.update-status');
     Route::get('/kreator/qrcode', [QrcodeController::class, 'index'])->name('kreator.qrcode');
 });
 
@@ -48,3 +57,4 @@ Route::post('/donate/{username}', [DashboardDonationController::class, 'send'])-
 
 
 Route::get('/overlay/{username}', [OverlayController::class, 'show'])->name('overlay.show');
+Route::get('/overlay/{username}/latest-donation', [OverlayController::class, 'latestDonation'])->name('overlay.latest-donation');

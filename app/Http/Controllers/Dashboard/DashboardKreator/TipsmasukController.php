@@ -31,17 +31,46 @@ class TipsmasukController extends Controller
 
     public function confirm(Donation $donation)
     {
+        return $this->updateStatus(new Request(['status' => 'paid']), $donation);
+    }
+
+    public function updateStatus(Request $request, Donation $donation)
+    {
         if ($donation->creatorProfile->user_id !== auth()->id()) {
             abort(403);
         }
 
-        $donation->update(['status' => 'paid']);
+        $status = $request->input('status', 'pending');
+        $allowedStatuses = ['pending', 'paid', 'rejected'];
+
+        if (!in_array($status, $allowedStatuses, true)) {
+            abort(400);
+        }
+
+        $previousStatus = $donation->status;
+        $donation->update(['status' => $status]);
 
         $creator = $donation->creatorProfile;
-        $creator->decrement('balance_pending', $donation->net_amount);
-        $creator->increment('balance_available', $donation->net_amount);
 
-        return redirect()->back()->with('success', 'Tip telah dikonfirmasi sebagai dibayar.');
+        if ($previousStatus !== 'paid' && $status === 'paid') {
+            $creator->decrement('balance_pending', $donation->net_amount);
+            $creator->increment('balance_available', $donation->net_amount);
+
+            session()->flash('tip_paid_popup', 'Donasi dari ' . ($donation->sender_name ?: 'Anonymous') . ' sebesar Rp ' . number_format($donation->amount, 0, ',', '.') . ' telah dikonfirmasi.');
+        }
+
+        if ($previousStatus === 'paid' && $status !== 'paid') {
+            $creator->decrement('balance_available', $donation->net_amount);
+            $creator->increment('balance_pending', $donation->net_amount);
+        }
+
+        $message = match ($status) {
+            'paid' => 'Tip telah dikonfirmasi sebagai dibayar.',
+            'pending' => 'Status tip dikembalikan ke pending.',
+            'rejected' => 'Tip ditandai sebagai ditolak.',
+        };
+
+        return redirect()->back()->with('success', $message);
     }
 
     //

@@ -31,12 +31,12 @@
                                <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2" />
                            </svg>
                        </div>
-                       <span
-                           class="flex-1 text-xs text-brand-muted break-all">https://chipin.io/tip/widget/7971a957-6421-42a1-b227-6bbf95a17cdf</span>
+                       <span data-overlay-url="{{ $overlayUrl ?? '' }}"
+                           class="flex-1 text-xs text-brand-muted break-all">{{ $overlayUrl ?? 'Belum ada profile creator.' }}</span>
                    </div>
                    <p class="text-[11px] text-brand-red mb-4">⚠️ Jangan kasih URL ini ke siapa-siapa ya. YTTA.</p>
                    <div class="flex gap-2.5 flex-wrap">
-                       <button
+                       <button type="button" onclick="copyOverlayUrl()"
                            class="flex-1 min-w-[100px] py-2.5 px-3 border border-brand-primary text-brand-primary font-semibold text-xs rounded-lg flex items-center justify-center gap-1.5 transition duration-150 hover:bg-brand-primary hover:text-white">
                            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24">
                                <rect x="9" y="9" width="13" height="13" rx="2" stroke="currentColor"
@@ -46,7 +46,7 @@
                            </svg>
                            Salin
                        </button>
-                       <button
+                       <button type="button" onclick="resetSettings()"
                            class="flex-1 min-w-[100px] py-2.5 px-3 border border-[#e85c3a] text-[#e85c3a] font-semibold text-xs rounded-lg flex items-center justify-center gap-1.5 transition duration-150 hover:bg-[#e85c3a] hover:text-white">
                            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24">
                                <path d="M4 4l16 16M4 20L20 4" stroke="currentColor" stroke-width="2"
@@ -54,13 +54,14 @@
                            </svg>
                            Ganti Key
                        </button>
-                       <button
+                       <button type="button"
+                           onclick="window.open('{{ $overlayUrl ?? '' }}', '_blank', 'width=480,height=320')"
                            class="flex-1 min-w-[100px] py-2.5 px-3 border border-brand-accent text-brand-accent2 font-semibold text-xs rounded-lg flex items-center justify-center gap-1.5 transition duration-150 hover:bg-brand-accent hover:text-brand-primary">
                            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24">
-                               <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 0 1-3.46 0"
+                               <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3"
                                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                            </svg>
-                           Test Alert
+                           Buka Overlay
                        </button>
                    </div>
                </div>
@@ -137,14 +138,95 @@
                    </div>
 
                    <div class="border-t border-brand-border pt-5 flex justify-end gap-3">
-                       <button
+                       <button type="button"
                            class="py-2 px-6 rounded-lg text-xs font-semibold border-2 border-brand-border bg-transparent text-brand-muted transition duration-150 hover:bg-brand-bg hover:text-brand-primary"
-                           onclick="alert('Pengaturan direset!')">Reset</button>
-                       <button
+                           onclick="resetSettings()">Reset</button>
+                       <button type="button"
                            class="py-2 px-6 rounded-lg text-xs font-semibold border-2 border-brand-accent bg-brand-accent text-brand-sidebar transition duration-150 hover:bg-brand-accent2 hover:border-brand-accent2"
-                           onclick="alert('Pengaturan tampilan berhasil disimpan!')">Simpan</button>
+                           onclick="saveSettings()">Simpan</button>
                    </div>
                </div>
            </div>
        </main>
    @endsection
+
+   <script>
+       const defaultColors = {
+           bg: '#6929F2',
+           msg: '#FFFFFF',
+           sender: '#C8E41B',
+           amount: '#C8E41B',
+       };
+
+       function toggleSwitch() {
+           const toggle = document.getElementById('toggle-fitur');
+           const active = toggle.dataset.active === 'true';
+           toggle.dataset.active = String(!active);
+           toggle.classList.toggle('bg-brand-accent', !active);
+           toggle.classList.toggle('bg-brand-muted', active);
+           toggle.classList.toggle('after:right-[3px]', active);
+           toggle.classList.toggle('after:left-[3px]', !active);
+           toggle.classList.toggle('after:right-auto', !active);
+       }
+
+       function updateColor(type, value) {
+           document.getElementById('hex-' + type).textContent = value.toUpperCase();
+           if (type === 'bg') {
+               document.getElementById('preview-alert').style.backgroundColor = value;
+           } else if (type === 'msg') {
+               document.getElementById('preview-msg').style.color = value;
+           } else if (type === 'sender') {
+               document.getElementById('preview-sender').style.color = value;
+           } else if (type === 'amount') {
+               document.getElementById('preview-amount').style.color = value;
+           }
+       }
+
+       function copyOverlayUrl() {
+           const text = document.querySelector('[data-overlay-url]')?.textContent?.trim();
+           if (!text) return;
+           navigator.clipboard.writeText(text).then(() => {
+               const button = event?.currentTarget;
+               if (button) {
+                   const original = button.innerHTML;
+                   button.innerHTML = 'Tersalin';
+                   setTimeout(() => button.innerHTML = original, 1500);
+               }
+           });
+       }
+
+       function testAlert() {
+           document.getElementById('preview-sender').textContent = 'Budi Fans';
+           document.getElementById('preview-msg').textContent = 'Semangat terus! Tip untuk stream kamu sangat berarti.';
+           document.getElementById('preview-amount').textContent = 'Rp 150.000';
+       }
+
+       function saveSettings() {
+           const colors = {
+               bg: document.getElementById('hex-bg').textContent,
+               msg: document.getElementById('hex-msg').textContent,
+               sender: document.getElementById('hex-sender').textContent,
+               amount: document.getElementById('hex-amount').textContent,
+           };
+           localStorage.setItem('chipin-overlay-colors', JSON.stringify(colors));
+           alert('Pengaturan tampilan berhasil disimpan!');
+       }
+
+       function resetSettings() {
+           Object.entries(defaultColors).forEach(([type, value]) => {
+               document.querySelector(`input[type="color"][oninput*="'${type}'"]`)?.value = value;
+               document.getElementById('hex-' + type).textContent = value.toUpperCase();
+               updateColor(type, value);
+           });
+           localStorage.removeItem('chipin-overlay-colors');
+           alert('Pengaturan direset!');
+       }
+
+       document.addEventListener('DOMContentLoaded', () => {
+           const saved = localStorage.getItem('chipin-overlay-colors');
+           if (saved) {
+               const colors = JSON.parse(saved);
+               Object.entries(colors).forEach(([type, value]) => updateColor(type, value));
+           }
+       });
+   </script>

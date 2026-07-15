@@ -16,7 +16,7 @@ class QrcodeController extends Controller
     }
     public function index()
     {
-        $user = auth()->user();
+        $user = auth()->user()->load('creatorProfile');
         $title = 'Dashboard QR-COde | ChipIn';
 
         return view('Qrcode', compact('user', 'title'));

@@ -37,10 +37,32 @@
 </head>
 
 <body class="bg-brand-bg text-brand-primary min-h-screen flex text-sm">
+    <div id="global-tip-popup"
+        class="fixed top-5 right-5 z-[9999] hidden max-w-sm w-[320px] rounded-2xl border border-brand-accent/20 bg-white shadow-2xl p-4">
+        <div class="flex items-start gap-3">
+            <div class="w-10 h-10 rounded-full bg-brand-accent/10 flex items-center justify-center text-brand-accent2">
+                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+            </div>
+            <div class="flex-1">
+                <div class="font-semibold text-brand-primary">Pembayaran dikonfirmasi</div>
+                <div id="global-tip-popup-message" class="text-sm text-brand-muted mt-1"></div>
+            </div>
+        </div>
+    </div>
+
     @include('layouts.navbar-kreator')
     @yield('dashboard-kreator')
 
     <script>
+        @if (session('tip_paid_popup'))
+            window.addEventListener('load', () => {
+                showGlobalTipPopup(@json(session('tip_paid_popup')));
+            });
+        @endif
+
         const copyUrlBtn = document.getElementById('copyUrlBtn');
         if (copyUrlBtn) {
             copyUrlBtn.addEventListener('click', () => {
@@ -81,6 +103,22 @@
             } else if (type === 'amount') {
                 document.getElementById('preview-amount').style.color = value;
             }
+        }
+
+        function showGlobalTipPopup(message) {
+            const popup = document.getElementById('global-tip-popup');
+            const popupMessage = document.getElementById('global-tip-popup-message');
+            if (!popup || !popupMessage) return;
+
+            popupMessage.textContent = message;
+            popup.classList.remove('hidden');
+            popup.classList.add('block');
+
+            clearTimeout(window.globalTipPopupTimer);
+            window.globalTipPopupTimer = setTimeout(() => {
+                popup.classList.add('hidden');
+                popup.classList.remove('block');
+            }, 4000);
         }
     </script>
 </body>

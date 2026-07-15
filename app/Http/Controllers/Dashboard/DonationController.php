@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Dashboard;
 
+use App\Events\TipReceived;
 use App\Http\Controllers\Controller;
 use App\Models\CreatorProfile;
 use App\Models\Donation;
+use App\Models\Users;
 use Illuminate\Http\Request;
 
 class DonationController extends Controller
@@ -26,21 +28,35 @@ class DonationController extends Controller
             'message' => 'nullable|string|max:500',
         ]);
 
+        $senderName = trim((string) ($validated['sender_name'] ?? ''));
+        $amount = (int) $validated['amount'];
+        $platformFee = (int) round($amount * Donation::PLATFORM_FEE_PERCENTAGE / 100);
+        $netAmount = $amount - $platformFee;
+
         $donationData = [
             'creator_profile_id' => $creator->id,
-            'sender_name' => $validated['sender_name'] ?? 'Anonymous',
+            'sender_name' => $senderName !== '' ? $senderName : 'Anonymous',
             'message' => $validated['message'],
-            'amount' => $validated['amount'],
+            'amount' => $amount,
+            'platform_fee' => $platformFee,
+            'net_amount' => $netAmount,
             'status' => 'pending',
         ];
 
-        if (auth()->check()) {
+        $matchedUser = $senderName !== ''
+            ? Users::whereRaw('LOWER(username) = ?', [strtolower($senderName)])->first()
+            : null;
+
+        if ($matchedUser) {
+            $donationData['user_id'] = $matchedUser->id;
+        } elseif (auth()->check()) {
             $donationData['user_id'] = auth()->id();
         }
 
         $donation = Donation::create($donationData);
 
-        $creator->increment('balance_pending', $donation->net_amount);
+        event(new TipReceived($donation));
+        $creator->increment('balance_pending', $donation->net_amount ?? $netAmount);
 
         return redirect()->route('donate.show', $username)
             ->with('success', 'Tip berhasil dikirim, menunggu konfirmasi pembayaran.');

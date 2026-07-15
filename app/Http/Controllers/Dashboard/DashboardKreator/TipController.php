@@ -17,11 +17,14 @@ class TipController extends Controller
 
     public function index()
     {
-
         $user = auth()->user()->load('creatorProfile');
         $title = 'Dashboard Tip | ChipIn';
 
-        return view('Tip', compact('user', 'title'));
+        $overlayUrl = $user->creatorProfile
+            ? route('overlay.show', $user->creatorProfile->username)
+            : null;
+
+        return view('Tip', compact('user', 'title', 'overlayUrl'));
     }
     //
 }

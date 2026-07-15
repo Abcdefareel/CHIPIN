@@ -7,14 +7,17 @@
     <title>ChipIN — Unleash Your Creative Potential</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
 <body class="font-['Plus_Jakarta_Sans',_'Inter',_sans-serif] bg-[#f8fafc] text-[#1e1b4b] antialiased min-h-screen">
 
     <!-- Navigation Bar -->
-    <nav class="bg-white/75 backdrop-blur-xl border-b border-slate-200/70 h-16 flex items-center sticky top-0 z-50 transition-all duration-300">
+    <nav
+        class="bg-white/75 backdrop-blur-xl border-b border-slate-200/70 h-16 flex items-center sticky top-0 z-50 transition-all duration-300">
         <div class="w-full max-w-[1100px] mx-auto px-6 flex items-center justify-between">
             <div class="flex items-center gap-2 font-bold text-[1.1rem] tracking-tight">
                 <svg class="w-5 h-5 text-[#1e1b4b]" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -223,6 +226,49 @@
                                         hingga 16/06/2026.
                                     </span>
                                 </div>
+                            </div>
+                        </div>
+
+                        <div
+                            class="bg-white border border-[#e2e8f0] rounded-2xl shadow-[0_2px_16px_rgba(79,70,229,0.08)] overflow-hidden">
+                            <div
+                                class="p-4 border-b border-[#e2e8f0] bg-[#eef2ff] font-bold text-[0.875rem] text-[#1e1b4b]">
+                                Riwayat Donasi Saya
+                            </div>
+                            <div class="p-4 flex flex-col gap-3">
+                                @if ($transactions->isEmpty())
+                                    <div
+                                        class="rounded-xl border border-dashed border-[#e2e8f0] p-6 text-center text-sm text-[#64748b]">
+                                        Belum ada riwayat donasi.
+                                    </div>
+                                @else
+                                    @foreach ($transactions as $transaction)
+                                        <div class="rounded-xl border border-[#e2e8f0] p-4">
+                                            <div class="flex items-center justify-between gap-3">
+                                                <div>
+                                                    <div class="font-semibold text-[#1e1b4b]">
+                                                        {{ $transaction->sender_name ?: 'Anonymous' }}
+                                                    </div>
+                                                    <div class="text-xs text-[#64748b] mt-1">
+                                                        {{ $transaction->created_at->translatedFormat('d M Y, H:i') }}
+                                                    </div>
+                                                </div>
+                                                <div class="text-right">
+                                                    <div class="font-bold text-indigo-600">Rp
+                                                        {{ number_format($transaction->amount, 0, ',', '.') }}</div>
+                                                    <div class="text-xs uppercase tracking-wide text-[#64748b]">
+                                                        {{ ucfirst($transaction->status) }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            @if ($transaction->message)
+                                                <div class="mt-3 rounded-lg bg-[#f8fafc] p-3 text-sm text-[#475569]">
+                                                    {{ $transaction->message }}
+                                                </div>
+                                            @endif
+                                        </div>
+                                    @endforeach
+                                @endif
                             </div>
                         </div>
 
