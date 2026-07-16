@@ -33,7 +33,7 @@
                 <div
                     class="flex items-center gap-2 bg-[#eef2ff] border border-[#e2e8f0] px-3 py-1.5 rounded-full text-[0.875rem] font-semibold text-[#64748b]">
                     <span class="w-2 h-2 rounded-full bg-orange-500"></span>
-                    @Abcdefareel
+                    {{ $user?->username ?? 'Guest' }}
                 </div>
                 <!-- Profile Dropdown Icon -->
                 <div

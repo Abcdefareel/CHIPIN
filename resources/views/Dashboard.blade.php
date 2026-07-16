@@ -7,14 +7,17 @@
     <title>ChipIN — Unleash Your Creative Potential</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
 <body class="font-['Plus_Jakarta_Sans',_'Inter',_sans-serif] bg-[#f8fafc] text-[#1e1b4b] antialiased min-h-screen">
 
     <!-- Navigation Bar -->
-    <nav class="bg-white/75 backdrop-blur-xl border-b border-slate-200/70 h-16 flex items-center sticky top-0 z-50 transition-all duration-300">
+    <nav
+        class="bg-white/75 backdrop-blur-xl border-b border-slate-200/70 h-16 flex items-center sticky top-0 z-50 transition-all duration-300">
         <div class="w-full max-w-[1100px] mx-auto px-6 flex items-center justify-between">
             <div class="flex items-center gap-2 font-bold text-[1.1rem] tracking-tight">
                 <svg class="w-5 h-5 text-[#1e1b4b]" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -27,29 +30,21 @@
 
             <div class="flex items-center gap-3">
                 <!-- User Badge -->
-                <div
-                    class="flex items-center gap-2 bg-[#eef2ff] border border-[#e2e8f0] px-3 py-1.5 rounded-full text-[0.875rem] font-semibold text-[#64748b]">
-                    <span class="w-2 h-2 rounded-full bg-orange-500"></span>
-                    {{ $user->username }}
-                </div>
-                <form action="{{ route('logout') }}" method="POST">
-                    @csrf
-                    <button type="submit"
-                        class="inline-flex items-center gap-2 bg-[#1e1b4b] text-white px-3 py-1.5 rounded-full text-[0.875rem] font-semibold hover:bg-[#312e81] transition-all">
+                <div class="flex items-center gap-3">
+                    <!-- User Badge -->
+                    <div
+                        class="flex items-center gap-2 bg-[#eef2ff] border border-[#e2e8f0] px-3 py-1.5 rounded-full text-[0.875rem] font-semibold text-[#64748b]">
+                        <span class="w-2 h-2 rounded-full bg-orange-500"></span>
+                        {{ $user->username }}
+                    </div>
+                    <!-- Profile Dropdown Icon -->
+                    <div
+                        class="w-8 h-8 rounded-full bg-[#1e1b4b] text-white flex items-center justify-center font-bold text-xs cursor-pointer hover:bg-[#312e81] transition-all">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h6a2 2 0 012 2v1" />
+                                d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
                         </svg>
-                        Logout
-                    </button>
-                </form>
-                <!-- Profile Dropdown Icon -->
-                <div
-                    class="w-8 h-8 rounded-full bg-[#1e1b4b] text-white flex items-center justify-center font-bold text-xs cursor-pointer hover:bg-[#312e81] transition-all">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
-                    </svg>
+                    </div>
                 </div>
             </div>
         </div>

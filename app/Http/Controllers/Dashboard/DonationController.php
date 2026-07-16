@@ -55,7 +55,12 @@ class DonationController extends Controller
 
         $donation = Donation::create($donationData);
 
-        event(new TipReceived($donation));
+        try {
+            event(new TipReceived($donation));
+        } catch (\Throwable $e) {
+            report($e);
+        }
+
         $creator->increment('balance_pending', $donation->net_amount ?? $netAmount);
 
         return redirect()->route('donate.show', $username)

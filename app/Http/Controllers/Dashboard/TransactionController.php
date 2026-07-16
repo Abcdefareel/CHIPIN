@@ -9,7 +9,9 @@ class TransactionController extends Controller
 {
     public function index(Request $request)
     {
-        $query = auth()->user()
+        $user = auth()->user();
+
+        $query = $user
             ->donations()
             ->with('creatorProfile');
 
@@ -42,6 +44,6 @@ class TransactionController extends Controller
 
         $transactions = $query->get();
 
-        return view('/Transaction', compact('transactions', 'request'));
+        return view('/Transaction', compact('transactions', 'request', 'user'));
     }
 }

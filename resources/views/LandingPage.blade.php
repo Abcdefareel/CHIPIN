@@ -355,31 +355,31 @@
             <div
                 class="group bg-white border border-[#e2e8f0] rounded-2xl overflow-hidden shadow-[0_2px_16px_rgba(79,70,229,0.08)] hover:shadow-[0_10px_30px_rgba(79,70,229,0.16)] hover:-translate-y-1 transition-all duration-300">
                 <img class="w-full aspect-square object-cover group-hover:scale-105 transition-transform duration-500"
-                    src="https://i.pinimg.com/736x/78/84/b2/7884b26c1375a662cd1c4e4eaad1a880.jpg"
-                    alt="Cosmos" />
+                    src="https://i.pinimg.com/736x/52/93/15/529315b26d9f4f58bea2e403474ee10b.jpg"
+                    alt="Marapthon" />
                 <div class="p-4">
-                    <h4 class="text-[0.875rem] font-bold text-[#1e1b4b]">Cosmos</h4>
-                    <p class="text-[0.75rem] text-[#64748b] mt-0.5">Digital Artist</p>
+                    <h4 class="text-[0.875rem] font-bold text-[#1e1b4b]">Marapthon</h4>
+                    <p class="text-[0.75rem] text-[#64748b] mt-0.5">Streamer</p>
                 </div>
             </div>
             <div
                 class="group bg-white border border-[#e2e8f0] rounded-2xl overflow-hidden shadow-[0_2px_16px_rgba(79,70,229,0.08)] hover:shadow-[0_10px_30px_rgba(79,70,229,0.16)] hover:-translate-y-1 transition-all duration-300">
                 <img class="w-full aspect-square object-cover group-hover:scale-105 transition-transform duration-500"
-                    src="https://i.pinimg.com/736x/da/2a/bd/da2abdbbb30117bd2c20422ead80dc33.jpg"
-                    alt="Zero" />
+                    src="https://i.pinimg.com/736x/93/6c/d8/936cd83e61e50fcb35d7553deb5f5542.jpg"
+                    alt="Close Th Door" />
                 <div class="p-4">
-                    <h4 class="text-[0.875rem] font-bold text-[#1e1b4b]">Zero</h4>
+                    <h4 class="text-[0.875rem] font-bold text-[#1e1b4b]">Close The Door</h4>
                     <p class="text-[0.75rem] text-[#64748b] mt-0.5">Podcaster</p>
                 </div>
             </div>
             <div
                 class="group bg-white border border-[#e2e8f0] rounded-2xl overflow-hidden shadow-[0_2px_16px_rgba(79,70,229,0.08)] hover:shadow-[0_10px_30px_rgba(79,70,229,0.16)] hover:-translate-y-1 transition-all duration-300">
                 <img class="w-full aspect-square object-cover group-hover:scale-105 transition-transform duration-500"
-                    src="https://i.pinimg.com/736x/aa/75/5d/aa755d1d21437a834157af3ab0609c4d.jpg"
-                    alt="Dyna" />
+                    src="https://i.pinimg.com/1200x/a0/4f/03/a04f03613a2a5446b2fe6a195d7d38be.jpg"
+                    alt="Windah Basudara" />
                 <div class="p-4">
-                    <h4 class="text-[0.875rem] font-bold text-[#1e1b4b]">Dyna</h4>
-                    <p class="text-[0.75rem] text-[#64748b] mt-0.5">UI Designer</p>
+                    <h4 class="text-[0.875rem] font-bold text-[#1e1b4b]">Windah Basudara</h4>
+                    <p class="text-[0.75rem] text-[#64748b] mt-0.5">Gamers</p>
                 </div>
             </div>
         </div>

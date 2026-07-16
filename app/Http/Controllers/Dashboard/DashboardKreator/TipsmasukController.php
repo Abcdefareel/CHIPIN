@@ -36,38 +36,49 @@ class TipsmasukController extends Controller
 
     public function updateStatus(Request $request, Donation $donation)
     {
+        if ($request->isMethod('GET')) {
+            return redirect()->route('kreator.tipmasuk');
+        }
+
         if ($donation->creatorProfile->user_id !== auth()->id()) {
             abort(403);
         }
 
         $status = $request->input('status', 'pending');
-        $allowedStatuses = ['pending', 'paid', 'rejected'];
+        $allowedStatuses = ['pending', 'paid', 'failed'];
 
-        if (!in_array($status, $allowedStatuses, true)) {
+        $normalizedStatus = match (strtolower((string) $status)) {
+            'paid' => 'paid',
+            'pending' => 'pending',
+            'rejected', 'failed' => 'failed',
+            default => 'pending',
+        };
+
+        if (!in_array($normalizedStatus, $allowedStatuses, true)) {
             abort(400);
         }
 
         $previousStatus = $donation->status;
-        $donation->update(['status' => $status]);
+        $donation->update(['status' => $normalizedStatus]);
 
         $creator = $donation->creatorProfile;
 
-        if ($previousStatus !== 'paid' && $status === 'paid') {
+        if ($previousStatus !== 'paid' && $normalizedStatus === 'paid') {
             $creator->decrement('balance_pending', $donation->net_amount);
             $creator->increment('balance_available', $donation->net_amount);
 
             session()->flash('tip_paid_popup', 'Donasi dari ' . ($donation->sender_name ?: 'Anonymous') . ' sebesar Rp ' . number_format($donation->amount, 0, ',', '.') . ' telah dikonfirmasi.');
         }
 
-        if ($previousStatus === 'paid' && $status !== 'paid') {
+        if ($previousStatus === 'paid' && $normalizedStatus !== 'paid') {
             $creator->decrement('balance_available', $donation->net_amount);
             $creator->increment('balance_pending', $donation->net_amount);
         }
 
-        $message = match ($status) {
+        $message = match ($normalizedStatus) {
             'paid' => 'Tip telah dikonfirmasi sebagai dibayar.',
             'pending' => 'Status tip dikembalikan ke pending.',
-            'rejected' => 'Tip ditandai sebagai ditolak.',
+            'failed' => 'Tip ditandai sebagai ditolak.',
         };
 
         return redirect()->back()->with('success', $message);

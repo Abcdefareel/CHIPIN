@@ -13,7 +13,14 @@ use App\Http\Controllers\Dashboard\TransactionController;
 use App\Http\Controllers\LandingPage\LandingPageController;
 use App\Http\Controllers\DonationController;
 use App\Http\Controllers\Dashboard\OverlayController;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
+
+Route::get('/migrate', function () {
+    Artisan::call('migrate', [
+        '--force' => true
+    ]);
+});
 
 Route::get('/', [LandingPageController::class, 'index']);
 
@@ -45,7 +52,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/kreator/tip', [TipController::class, 'index'])->name('kreator.tip');
     Route::get('/kreator/tipmasuk', [TipsmasukController::class, 'index'])->name('kreator.tipmasuk');
     Route::put('/kreator/tipmasuk/{donation}/confirm', [TipsmasukController::class, 'confirm'])->name('kreator.tipmasuk.confirm');
-    Route::patch('/kreator/tipmasuk/{donation}/status', [TipsmasukController::class, 'updateStatus'])->name('kreator.tipmasuk.update-status');
+    Route::match(['GET', 'POST', 'PATCH'], '/kreator/tipmasuk/{donation}/status', [TipsmasukController::class, 'updateStatus'])->name('kreator.tipmasuk.update-status');
     Route::get('/kreator/qrcode', [QrcodeController::class, 'index'])->name('kreator.qrcode');
 });
 
